@@ -191,6 +191,16 @@ namespace CoderEditor
             }
         }
 
+        private void KeithleySplitter_Click(object sender, RoutedEventArgs e)
+        {
+            string template = "\n/********** Keithley 2636B **********/\n";
+            textArea.TextArea.Document.Insert(textArea.CaretOffset, template);
+        }
 
+        private void KeysightSplitter_Click(object sender, RoutedEventArgs e)
+        {
+            string template = "\n/********** Keysight E4982AL (0,0,0) **********/\n";
+            textArea.TextArea.Document.Insert(textArea.CaretOffset, template);
+        }
     }
 }

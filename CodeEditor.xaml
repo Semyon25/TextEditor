@@ -69,7 +69,12 @@
                 <materialDesign:PackIcon Kind="Redo"/>
             </Button>-->
             <Separator/>
-            
+            <Button Click="KeithleySplitter_Click"  ToolTip="Splitter for Keithley" Content="Keithley"
+                    Style="{StaticResource MaterialDesignRaisedButton}" Height="Auto" Padding="2" Margin="5">
+            </Button>
+            <Button Click="KeysightSplitter_Click" ToolTip="Splitter for Keysight" Content="Keysight"
+                    Style="{StaticResource MaterialDesignRaisedButton}" Height="Auto" Padding="2" Margin="5">
+            </Button>
         </ToolBar>
         <avalonedit:TextEditor ShowLineNumbers="True" Grid.Row="1" x:Name="textArea" FontSize="{Binding ElementName=UserControl0, Path=fontSize, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" SyntaxHighlighting="C#">
             <i:Interaction.Behaviors>
