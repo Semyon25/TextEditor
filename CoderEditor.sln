@@ -1,0 +1,25 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.29613.14
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CoderEditor", "CoderEditor.csproj", "{1D9EF421-7324-4638-AF48-0CEC5A7B0FED}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{1D9EF421-7324-4638-AF48-0CEC5A7B0FED}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{1D9EF421-7324-4638-AF48-0CEC5A7B0FED}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{1D9EF421-7324-4638-AF48-0CEC5A7B0FED}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{1D9EF421-7324-4638-AF48-0CEC5A7B0FED}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {A3C0E5A3-012C-4BB6-AC15-CE092D035517}
+	EndGlobalSection
+EndGlobal
