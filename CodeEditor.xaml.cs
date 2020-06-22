@@ -20,17 +20,23 @@ namespace CoderEditor
             //DataContext = this;
         }
 
-        public static DependencyProperty CodeTextProperty;
+        string[] separator = new string[] { "//Main" };
+
+        public static DependencyProperty CodeTextProperty1;
+        public static DependencyProperty CodeTextProperty2;
         public static DependencyProperty fontSizeProperty;
 
 
         static CodeEditor()
         {
-            var metadata = new FrameworkPropertyMetadata(new PropertyChangedCallback(OnCodeTextChanged));
-            CodeTextProperty = DependencyProperty.Register("CodeText", typeof(string), typeof(CodeEditor), metadata);
+            var metadata = new FrameworkPropertyMetadata(new PropertyChangedCallback(OnCodeTextChanged1));
+            CodeTextProperty1 = DependencyProperty.Register("CodeText1", typeof(string), typeof(CodeEditor), metadata);
+            metadata = new FrameworkPropertyMetadata(new PropertyChangedCallback(OnCodeTextChanged2));
+            CodeTextProperty2 = DependencyProperty.Register("CodeText2", typeof(string), typeof(CodeEditor), metadata);
             metadata = new FrameworkPropertyMetadata(new PropertyChangedCallback(OnfontSizeChanged));
             fontSizeProperty = DependencyProperty.Register("fontSize", typeof(int), typeof(CodeEditor), metadata);
         }
+
 
         private static void OnfontSizeChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
         {
@@ -38,26 +44,46 @@ namespace CoderEditor
             int newVal = (int)e.NewValue;
             if (newVal == 0) return;
             if (newVal == (int)e.OldValue) return;
-            userControl.textArea.FontSize = newVal;
+            userControl.textAreaGlobal.FontSize = newVal;
+            userControl.textAreaMain.FontSize = newVal;
         }
 
-        private static void OnCodeTextChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
+        private static void OnCodeTextChanged1(DependencyObject d, DependencyPropertyChangedEventArgs e)
         {
             CodeEditor userControl = (CodeEditor)d;
             string newVal = (string)e.NewValue;
             if (newVal == (string)e.OldValue || newVal==null) return;
-            userControl.Coder.GiveMeTheText = newVal;
+            userControl.Coder1.GiveMeTheText = newVal;
             if (HasChanges == false) HasChanges = true;
         }
 
-        public string CodeText
+        private static void OnCodeTextChanged2(DependencyObject d, DependencyPropertyChangedEventArgs e)
         {
-            get { return (string)GetValue(CodeTextProperty); }
+            CodeEditor userControl = (CodeEditor)d;
+            string newVal = (string)e.NewValue;
+            if (newVal == (string)e.OldValue || newVal == null) return;
+            userControl.Coder2.GiveMeTheText = newVal;
+            if (HasChanges == false) HasChanges = true;
+        }
+
+
+        public string CodeText1
+        {
+            get { return (string)GetValue(CodeTextProperty1); }
             set
             {
-                SetValue(CodeTextProperty, value); OnPropertyChanged();
+                SetValue(CodeTextProperty1, value); OnPropertyChanged();
             }
         }
+        public string CodeText2
+        {
+            get { return (string)GetValue(CodeTextProperty2); }
+            set
+            {
+                SetValue(CodeTextProperty2, value); OnPropertyChanged();
+            }
+        }
+
         public int fontSize
         {
             get { return (int)GetValue(fontSizeProperty); }
@@ -76,18 +102,25 @@ namespace CoderEditor
         }
 
         private static bool HasChanges;
-        //private string fileName;
         private void increaseFontClick(object sender, RoutedEventArgs e)
         {
             if (decreaseFontButton.IsEnabled == false) decreaseFontButton.IsEnabled = true;
-            if (textArea.FontSize < 36) textArea.FontSize += 2;
+            if (textAreaGlobal.FontSize < 36)
+            {
+                textAreaGlobal.FontSize += 2;
+                textAreaMain.FontSize += 2;
+            }
             else increaseFontButton.IsEnabled = false;
         }
 
         void decreaseFontClick(object sender, RoutedEventArgs e)
         {
             if (increaseFontButton.IsEnabled == false) increaseFontButton.IsEnabled = true;
-            if (textArea.FontSize > 8) textArea.FontSize -= 2;
+            if (textAreaGlobal.FontSize > 8)
+            {
+                textAreaGlobal.FontSize -= 2;
+                textAreaMain.FontSize -= 2;
+            }
             else decreaseFontButton.IsEnabled = false;
         }
 
@@ -100,7 +133,9 @@ namespace CoderEditor
             {
                 var fileName = dlg.FileName;
                 var sr = new StreamReader(fileName, Encoding.Default);
-                textArea.Text = sr.ReadToEnd();
+                var textForOpen = sr.ReadToEnd().Split(separator, StringSplitOptions.None);
+                textAreaGlobal.Text = textForOpen[0].Trim();
+                textAreaMain.Text = textForOpen.Length == 2 ? textForOpen[1].Trim() : "";
                 return true;
             }
             return false;
@@ -118,7 +153,8 @@ namespace CoderEditor
                     {
                         using (StreamWriter sw = new StreamWriter(fs))
                         {
-                            sw.WriteLine(textArea.Text);
+                            var textForSaving = $"{textAreaGlobal.Text}\n{separator[0]}\n{textAreaMain.Text}";
+                            sw.WriteLine(textForSaving);
                         }
                     }
                     return true;
@@ -127,32 +163,27 @@ namespace CoderEditor
             }
             else
             {
-                //using (FileStream fs = File.Create(file))
-                //{
-                //    using (StreamWriter sw = new StreamWriter(fs))
-                //    {
-                //        sw.WriteLine(textArea.Text);
-                //    }
-                //}
                 return true;
             }
         }
 
         void newFileClick(object sender, RoutedEventArgs e)
         {
-            if (textArea.CanUndo && HasChanges && textArea.Text!="")
+            if (IsNeedSaveFile())
             {
                 var result = MessageBox.Show("Do you want to save changes?", "New", MessageBoxButton.YesNoCancel, MessageBoxImage.Question);
                 if (result == MessageBoxResult.Yes)
                 {
                     if (save())
                     {
-                        textArea.Text=string.Empty;
+                        textAreaGlobal.Text=string.Empty;
+                        textAreaMain.Text = string.Empty;
                     }
                 }
                 else if (result == MessageBoxResult.No)
                 {
-                    textArea.Text = string.Empty;
+                    textAreaGlobal.Text = string.Empty;
+                    textAreaMain.Text = string.Empty;
                 }
                 else
                 {
@@ -161,14 +192,14 @@ namespace CoderEditor
             }
             else
             {
-                textArea.Text = string.Empty;
+                textAreaGlobal.Text = string.Empty;
+                textAreaMain.Text = string.Empty;
             }
-            //fileName = "";
         }
 
         void openFileClick(object sender, RoutedEventArgs e)
         {
-            if (textArea.CanUndo && HasChanges && textArea.Text!="")
+            if (IsNeedSaveFile())
             {
                 var result = MessageBox.Show("Do you want to save changes?", "Open", MessageBoxButton.YesNoCancel, MessageBoxImage.Question);
                 if (result == MessageBoxResult.Yes)
@@ -189,21 +220,40 @@ namespace CoderEditor
             }
         }
 
-        //void saveFileClick(object sender, RoutedEventArgs e)
-        //{
-        //    save(fileName);
-        //    HasChanges = false;
-        //}
-
         void saveAsFileClick(object sender, RoutedEventArgs e)
         {
-            if (textArea.CanUndo && HasChanges)
+            if (IsNeedSaveFile())
             {
                 save();
                 HasChanges = false;
             }
         }
 
+
+        bool IsNeedSaveFile()
+        {
+            if (
+                ((textAreaGlobal.CanUndo && textAreaGlobal.Text != "") ||
+                (textAreaMain.CanUndo && textAreaMain.Text != ""))
+                )
+            {
+                return true;
+            }
+            else return false;
+        }
+
+        public void InsertTextToCaretPosition(string text)
+        {
+            var tab = tabs.SelectedItem as TabItem;
+            if (tab.Name == "tab1")
+            {
+                textAreaGlobal.TextArea.Document.Insert(textAreaGlobal.CaretOffset, text);
+            }
+            else if (tab.Name == "tab2")
+            {
+                textAreaMain.TextArea.Document.Insert(textAreaMain.CaretOffset, text);
+            }
+        }
 
     }
 }

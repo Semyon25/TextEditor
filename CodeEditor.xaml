@@ -8,6 +8,7 @@
              xmlns:i="clr-namespace:System.Windows.Interactivity;assembly=System.Windows.Interactivity"
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="800"
+             Background="White"
              x:Name="UserControl0">
     <Grid>
         <Grid.RowDefinitions>
@@ -15,13 +16,13 @@
             <RowDefinition/>
         </Grid.RowDefinitions>
         <ToolBar>
-            <Button Click="newFileClick" ToolTip="New">
+            <Button Click="newFileClick" ToolTip="Новый">
                 <Image Source="Images/new.jpg" Height="16"/>
             </Button>
-            <Button Click="openFileClick" ToolTip="Open" >
+            <Button Click="openFileClick" ToolTip="Открыть" >
                 <Image Source="Images/Open.png" Height="16"/>
             </Button>
-            <Button Click="saveAsFileClick" ToolTip="Save">
+            <Button Click="saveAsFileClick" ToolTip="Сохранить">
                 <Image Source="Images/Save.png" Height="16"/>
             </Button>
             <!--<Button Click="saveAsFileClick" ToolTip="Save As...">
@@ -31,20 +32,20 @@
                 <Image Source="Images/Delete.png" Height="16"/>
             </Button>-->
             <Separator/>
-            <Button Command="ApplicationCommands.Cut" ToolTip="Cut" >
+            <Button Command="ApplicationCommands.Cut" ToolTip="Вырезать" >
                 <Image Source="Images/Cut.png" Height="16"/>
             </Button>
-            <Button Command="ApplicationCommands.Copy" ToolTip="Copy" >
+            <Button Command="ApplicationCommands.Copy" ToolTip="Копировать" >
                 <Image Source="Images/Copy.png" Height="16"/>
             </Button>
-            <Button Command="ApplicationCommands.Paste" ToolTip="Paste" >
+            <Button Command="ApplicationCommands.Paste" ToolTip="Вставить" >
                 <Image Source="Images/Paste.png" Height="16"/>
             </Button>
             <Separator/>
-            <Button Command="ApplicationCommands.Undo" ToolTip="Undo">
+            <Button Command="ApplicationCommands.Undo" ToolTip="Отменить">
                 <Image Source="Images/Undo.png" Height="16"/>
             </Button>
-            <Button Command="ApplicationCommands.Redo" ToolTip="Redo">
+            <Button Command="ApplicationCommands.Redo" ToolTip="Повторить">
                 <Image Source="Images/Redo.png" Height="16"/>
             </Button>
             <Separator/>
@@ -55,10 +56,24 @@
                 <TextBlock Text="-" Width="16" TextAlignment="Center" FontWeight="Bold" />
             </Button>
         </ToolBar>
-        <avalonedit:TextEditor ShowLineNumbers="True" Grid.Row="1" x:Name="textArea" FontSize="{Binding ElementName=UserControl0, Path=fontSize, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}">
-            <i:Interaction.Behaviors>
-                <local:AvalonEditBehaviour x:Name="Coder" GiveMeTheText="{Binding ElementName=UserControl0, Path=CodeText, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
-            </i:Interaction.Behaviors>
-        </avalonedit:TextEditor>
+        <TabControl x:Name="tabs" Grid.Row="1" >
+            <TabItem x:Name="tab1" Header="Объявление функций">
+                <avalonedit:TextEditor ShowLineNumbers="True" x:Name="textAreaGlobal" SyntaxHighlighting="C#"
+                               FontSize="{Binding ElementName=UserControl0, Path=fontSize, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}">
+                    <i:Interaction.Behaviors>
+                        <local:AvalonEditBehaviour x:Name="Coder1" GiveMeTheText="{Binding ElementName=UserControl0, Path=CodeText1, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
+                    </i:Interaction.Behaviors>
+                </avalonedit:TextEditor>
+            </TabItem>
+            <TabItem x:Name="tab2" Header="Функция Main" >
+                <avalonedit:TextEditor ShowLineNumbers="True" x:Name="textAreaMain" SyntaxHighlighting="C#"
+                               FontSize="{Binding ElementName=UserControl0, Path=fontSize, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}">
+                    <i:Interaction.Behaviors>
+                        <local:AvalonEditBehaviour x:Name="Coder2" GiveMeTheText="{Binding ElementName=UserControl0, Path=CodeText2, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
+                    </i:Interaction.Behaviors>
+                </avalonedit:TextEditor>
+            </TabItem>
+        </TabControl>
+        
     </Grid>
 </UserControl>
