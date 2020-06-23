@@ -21,6 +21,7 @@ namespace CoderEditor
         }
 
         string[] separator = new string[] { "//Main" };
+        string fileName;
 
         public static DependencyProperty CodeTextProperty1;
         public static DependencyProperty CodeTextProperty2;
@@ -131,7 +132,7 @@ namespace CoderEditor
             dlg.CheckFileExists = true;
             if (dlg.ShowDialog() ?? false)
             {
-                var fileName = dlg.FileName;
+                this.fileName = dlg.FileName;
                 var sr = new StreamReader(fileName);
                 var textForOpen = sr.ReadToEnd().Split(separator, StringSplitOptions.None);
                 textAreaGlobal.Text = textForOpen[0].Trim();
@@ -141,30 +142,30 @@ namespace CoderEditor
             return false;
         }
 
-        bool save(string file = "")
+        bool save(string file)
         {
-            if (file == "" || file == null)
+            if (string.IsNullOrEmpty(file))
             {
                 SaveFileDialog sfd = new SaveFileDialog();
                 sfd.Filter = "Text files (*.txt)|*.txt|All Files (*.*)|*.*";
-                if (sfd.ShowDialog() ?? false)
+                if (sfd.ShowDialog() == true)
                 {
-                    using (FileStream fs = File.Create(sfd.FileName))
-                    {
-                        using (StreamWriter sw = new StreamWriter(fs))
-                        {
-                            var textForSaving = $"{textAreaGlobal.Text}\n{separator[0]}\n{textAreaMain.Text}";
-                            sw.WriteLine(textForSaving);
-                        }
-                    }
-                    return true;
+                    fileName = sfd.FileName;
                 }
-                return false;
+                else
+                {
+                    return false;
+                }
             }
-            else
+            using (FileStream fs = File.Create(fileName))
             {
-                return true;
+                using (StreamWriter sw = new StreamWriter(fs))
+                {
+                    var textForSaving = $"{textAreaGlobal.Text}\n{separator[0]}\n{textAreaMain.Text}";
+                    sw.WriteLine(textForSaving);
+                }
             }
+            return true;
         }
 
         void newFileClick(object sender, RoutedEventArgs e)
@@ -174,7 +175,7 @@ namespace CoderEditor
                 var result = MessageBox.Show("Do you want to save changes?", "New", MessageBoxButton.YesNoCancel, MessageBoxImage.Question);
                 if (result == MessageBoxResult.Yes)
                 {
-                    if (save())
+                    if (save(fileName))
                     {
                         textAreaGlobal.Text=string.Empty;
                         textAreaMain.Text = string.Empty;
@@ -204,7 +205,7 @@ namespace CoderEditor
                 var result = MessageBox.Show("Do you want to save changes?", "Open", MessageBoxButton.YesNoCancel, MessageBoxImage.Question);
                 if (result == MessageBoxResult.Yes)
                 {
-                    if (save())
+                    if (save(fileName))
                     {
                         open();
                     }
@@ -224,7 +225,7 @@ namespace CoderEditor
         {
             if (IsNeedSaveFile())
             {
-                save();
+                save(fileName);
                 HasChanges = false;
             }
         }
