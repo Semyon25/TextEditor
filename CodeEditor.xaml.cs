@@ -132,7 +132,7 @@ namespace CoderEditor
             if (dlg.ShowDialog() ?? false)
             {
                 var fileName = dlg.FileName;
-                var sr = new StreamReader(fileName, Encoding.Default);
+                var sr = new StreamReader(fileName);
                 var textForOpen = sr.ReadToEnd().Split(separator, StringSplitOptions.None);
                 textAreaGlobal.Text = textForOpen[0].Trim();
                 textAreaMain.Text = textForOpen.Length == 2 ? textForOpen[1].Trim() : "";
