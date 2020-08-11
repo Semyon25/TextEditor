@@ -221,13 +221,19 @@ namespace CoderEditor
             }
         }
 
-        void saveAsFileClick(object sender, RoutedEventArgs e)
+        void saveFileClick(object sender, RoutedEventArgs e)
         {
             if (IsNeedSaveFile())
             {
                 save(fileName);
                 HasChanges = false;
             }
+        }
+
+        void saveAsFileClick(object sender, RoutedEventArgs e)
+        {
+            save(null);
+            HasChanges = false;
         }
 
 

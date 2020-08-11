@@ -22,12 +22,12 @@
             <Button Click="openFileClick" ToolTip="Открыть" >
                 <Image Source="Images/Open.png" Height="16"/>
             </Button>
-            <Button Click="saveAsFileClick" ToolTip="Сохранить">
+            <Button Click="saveFileClick" ToolTip="Сохранить">
                 <Image Source="Images/Save.png" Height="16"/>
             </Button>
-            <!--<Button Click="saveAsFileClick" ToolTip="Save As...">
+            <Button Click="saveAsFileClick" ToolTip="Сохранить как...">
                 <Image Source="Images/SaveAs.png" Height="16"/>
-            </Button>-->
+            </Button>
             <!--<Button >
                 <Image Source="Images/Delete.png" Height="16"/>
             </Button>-->
