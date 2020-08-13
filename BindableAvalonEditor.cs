@@ -34,12 +34,12 @@ namespace CoderEditor
 
         private void AssociatedObjectOnTextChanged(object sender, EventArgs eventArgs)
         {
-            var textEditor = sender as TextEditor;
-            if (textEditor != null)
-            {
-                if (textEditor.Document != null)
-                    GiveMeTheText = textEditor.Document.Text;
-            }
+            //var textEditor = sender as TextEditor;
+            //if (textEditor != null)
+            //{
+            //    if (textEditor.Document != null)
+            //        GiveMeTheText = textEditor.Document.Text;
+            //}
         }
 
         private static void PropertyChangedCallback(
@@ -53,15 +53,24 @@ namespace CoderEditor
                 if (editor.Document != null)
                 {
                     var caretOffset = editor.CaretOffset;
-                    if (dependencyPropertyChangedEventArgs.NewValue == null) editor.Document.Text = "";
-                    else editor.Document.Text = dependencyPropertyChangedEventArgs.NewValue.ToString();
+
+                    string newVal = (string)dependencyPropertyChangedEventArgs.NewValue;
+                    string oldVal = (string)dependencyPropertyChangedEventArgs.OldValue;
+
+                    if (newVal == null)
+                    {
+                        editor.Document.Text = "";
+                    }
+                    else
+                    {
+                        editor.Document.Text = dependencyPropertyChangedEventArgs.NewValue.ToString();
+                    } 
+
                     if (caretOffset > editor.Text.Length) editor.Select(editor.Text.Length, 0);
                     else editor.CaretOffset = caretOffset;
                 }
             }
         }
-
-
 
     }
 }

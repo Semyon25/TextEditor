@@ -6,6 +6,8 @@ using System.Runtime.CompilerServices;
 using System.Text;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Threading;
+using ICSharpCode.AvalonEdit.Folding;
 
 namespace CoderEditor
 {
@@ -18,6 +20,33 @@ namespace CoderEditor
         {
             InitializeComponent();
             //DataContext = this;
+
+            textAreaGlobal.TextArea.IndentationStrategy = 
+                new ICSharpCode.AvalonEdit.Indentation.CSharp.CSharpIndentationStrategy(textAreaGlobal.Options);
+            foldingStrategy = new BraceFoldingStrategy();
+            if (foldingStrategy != null)
+            {
+                if (foldingManager == null)
+                    foldingManager = FoldingManager.Install(textAreaGlobal.TextArea);
+                UpdateFoldings();
+            }
+
+            DispatcherTimer foldingUpdateTimer = new DispatcherTimer();
+            foldingUpdateTimer.Interval = TimeSpan.FromSeconds(2);
+            foldingUpdateTimer.Tick += delegate { UpdateFoldings(); };
+            foldingUpdateTimer.Start();
+        }
+
+        FoldingManager foldingManager;
+        object foldingStrategy;
+
+        void UpdateFoldings()
+        {
+            if (foldingStrategy is BraceFoldingStrategy)
+            {
+                ((BraceFoldingStrategy)foldingStrategy).UpdateFoldings(foldingManager, textAreaGlobal.Document);
+            }
+
         }
 
         string[] separator = new string[] { "//Main" };
@@ -53,8 +82,9 @@ namespace CoderEditor
         {
             CodeEditor userControl = (CodeEditor)d;
             string newVal = (string)e.NewValue;
-            if (newVal == (string)e.OldValue || newVal==null) return;
+            if (newVal == (string)e.OldValue || newVal == null) return;
             userControl.Coder1.GiveMeTheText = newVal;
+
             if (HasChanges == false) HasChanges = true;
         }
 
