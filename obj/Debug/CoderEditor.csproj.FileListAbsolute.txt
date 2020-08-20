@@ -55,3 +55,4 @@ C:\Users\Panichev.s\Desktop\TextEditor\obj\Debug\CoderEditor.csproj.CoreCompileI
 C:\Users\Panichev.s\Desktop\TextEditor\obj\Debug\CoderEditor.csproj.CopyComplete
 C:\Users\Panichev.s\Desktop\TextEditor\obj\Debug\CoderEditor.dll
 C:\Users\Panichev.s\Desktop\TextEditor\obj\Debug\CoderEditor.pdb
+C:\Users\Panichev.s\Desktop\TextEditor\obj\Debug\CoderEditor.csprojAssemblyReference.cache

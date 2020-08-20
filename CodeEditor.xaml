@@ -59,18 +59,14 @@
         <TabControl x:Name="tabs" Grid.Row="1" >
             <TabItem x:Name="tab1" Header="Объявление функций">
                 <avalonedit:TextEditor ShowLineNumbers="True" x:Name="textAreaGlobal" SyntaxHighlighting="C#"
-                               FontSize="{Binding ElementName=UserControl0, Path=fontSize, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}">
-                    <i:Interaction.Behaviors>
-                        <local:AvalonEditBehaviour x:Name="Coder1" GiveMeTheText="{Binding ElementName=UserControl0, Path=CodeText1, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
-                    </i:Interaction.Behaviors>
+                               FontSize="{Binding ElementName=UserControl0, Path=fontSize, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                                       >
+                    
                 </avalonedit:TextEditor>
             </TabItem>
             <TabItem x:Name="tab2" Header="Функция Main" >
                 <avalonedit:TextEditor ShowLineNumbers="True" x:Name="textAreaMain" SyntaxHighlighting="C#"
                                FontSize="{Binding ElementName=UserControl0, Path=fontSize, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}">
-                    <i:Interaction.Behaviors>
-                        <local:AvalonEditBehaviour x:Name="Coder2" GiveMeTheText="{Binding ElementName=UserControl0, Path=CodeText2, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
-                    </i:Interaction.Behaviors>
                 </avalonedit:TextEditor>
             </TabItem>
         </TabControl>

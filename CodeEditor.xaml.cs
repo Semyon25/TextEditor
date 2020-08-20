@@ -3,7 +3,6 @@ using System;
 using System.ComponentModel;
 using System.IO;
 using System.Runtime.CompilerServices;
-using System.Text;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Threading;
@@ -19,7 +18,6 @@ namespace CoderEditor
         public CodeEditor()
         {
             InitializeComponent();
-            //DataContext = this;
 
             textAreaGlobal.TextArea.IndentationStrategy = 
                 new ICSharpCode.AvalonEdit.Indentation.CSharp.CSharpIndentationStrategy(textAreaGlobal.Options);
@@ -52,18 +50,15 @@ namespace CoderEditor
         string[] separator = new string[] { "//Main" };
         string fileName;
 
-        public static DependencyProperty CodeTextProperty1;
-        public static DependencyProperty CodeTextProperty2;
+        
         public static DependencyProperty fontSizeProperty;
 
+        public string Code1 => textAreaGlobal.Text;
+        public string Code2 => textAreaMain.Text;
 
         static CodeEditor()
         {
-            var metadata = new FrameworkPropertyMetadata(new PropertyChangedCallback(OnCodeTextChanged1));
-            CodeTextProperty1 = DependencyProperty.Register("CodeText1", typeof(string), typeof(CodeEditor), metadata);
-            metadata = new FrameworkPropertyMetadata(new PropertyChangedCallback(OnCodeTextChanged2));
-            CodeTextProperty2 = DependencyProperty.Register("CodeText2", typeof(string), typeof(CodeEditor), metadata);
-            metadata = new FrameworkPropertyMetadata(new PropertyChangedCallback(OnfontSizeChanged));
+            var metadata = new FrameworkPropertyMetadata(new PropertyChangedCallback(OnfontSizeChanged));
             fontSizeProperty = DependencyProperty.Register("fontSize", typeof(int), typeof(CodeEditor), metadata);
         }
 
@@ -78,42 +73,6 @@ namespace CoderEditor
             userControl.textAreaMain.FontSize = newVal;
         }
 
-        private static void OnCodeTextChanged1(DependencyObject d, DependencyPropertyChangedEventArgs e)
-        {
-            CodeEditor userControl = (CodeEditor)d;
-            string newVal = (string)e.NewValue;
-            if (newVal == (string)e.OldValue || newVal == null) return;
-            userControl.Coder1.GiveMeTheText = newVal;
-
-            if (HasChanges == false) HasChanges = true;
-        }
-
-        private static void OnCodeTextChanged2(DependencyObject d, DependencyPropertyChangedEventArgs e)
-        {
-            CodeEditor userControl = (CodeEditor)d;
-            string newVal = (string)e.NewValue;
-            if (newVal == (string)e.OldValue || newVal == null) return;
-            userControl.Coder2.GiveMeTheText = newVal;
-            if (HasChanges == false) HasChanges = true;
-        }
-
-
-        public string CodeText1
-        {
-            get { return (string)GetValue(CodeTextProperty1); }
-            set
-            {
-                SetValue(CodeTextProperty1, value); OnPropertyChanged();
-            }
-        }
-        public string CodeText2
-        {
-            get { return (string)GetValue(CodeTextProperty2); }
-            set
-            {
-                SetValue(CodeTextProperty2, value); OnPropertyChanged();
-            }
-        }
 
         public int fontSize
         {
@@ -132,7 +91,7 @@ namespace CoderEditor
                 PropertyChanged(this, new PropertyChangedEventArgs(prop));
         }
 
-        private static bool HasChanges;
+        //private static bool HasChanges;
         private void increaseFontClick(object sender, RoutedEventArgs e)
         {
             if (decreaseFontButton.IsEnabled == false) decreaseFontButton.IsEnabled = true;
@@ -256,14 +215,14 @@ namespace CoderEditor
             if (IsNeedSaveFile())
             {
                 save(fileName);
-                HasChanges = false;
+                //HasChanges = false;
             }
         }
 
         void saveAsFileClick(object sender, RoutedEventArgs e)
         {
             save(null);
-            HasChanges = false;
+            //HasChanges = false;
         }
 
 

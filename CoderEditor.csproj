@@ -64,7 +64,6 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
-    <Compile Include="BindableAvalonEditor.cs" />
     <Compile Include="BraceFoldingStrategy.cs" />
     <Compile Include="CodeEditor.xaml.cs">
       <DependentUpon>CodeEditor.xaml</DependentUpon>
