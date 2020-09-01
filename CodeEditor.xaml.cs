@@ -48,7 +48,15 @@ namespace CoderEditor
         }
 
         string[] separator = new string[] { "//Main" };
-        string fileName;
+        //string fileName;
+
+        public string PathToFile
+        {
+            get { return (string)GetValue(PathToFileProperty); }
+            set { SetValue(PathToFileProperty, value); }
+        }
+        public static readonly DependencyProperty PathToFileProperty =
+            DependencyProperty.Register("PathToFile", typeof(string), typeof(CodeEditor), new PropertyMetadata(""));
 
         
         public static DependencyProperty fontSizeProperty;
@@ -121,8 +129,8 @@ namespace CoderEditor
             dlg.CheckFileExists = true;
             if (dlg.ShowDialog() ?? false)
             {
-                this.fileName = dlg.FileName;
-                var sr = new StreamReader(fileName);
+                this.PathToFile = dlg.FileName;
+                var sr = new StreamReader(PathToFile);
                 var textForOpen = sr.ReadToEnd().Split(separator, StringSplitOptions.None);
                 textAreaGlobal.Text = textForOpen[0].Trim();
                 textAreaMain.Text = textForOpen.Length == 2 ? textForOpen[1].Trim() : "";
@@ -139,14 +147,14 @@ namespace CoderEditor
                 sfd.Filter = "Text files (*.txt)|*.txt|All Files (*.*)|*.*";
                 if (sfd.ShowDialog() == true)
                 {
-                    fileName = sfd.FileName;
+                    PathToFile = sfd.FileName;
                 }
                 else
                 {
                     return false;
                 }
             }
-            using (FileStream fs = File.Create(fileName))
+            using (FileStream fs = File.Create(PathToFile))
             {
                 using (StreamWriter sw = new StreamWriter(fs))
                 {
@@ -164,7 +172,7 @@ namespace CoderEditor
                 var result = MessageBox.Show("Do you want to save changes?", "New", MessageBoxButton.YesNoCancel, MessageBoxImage.Question);
                 if (result == MessageBoxResult.Yes)
                 {
-                    if (save(fileName))
+                    if (save(PathToFile))
                     {
                         textAreaGlobal.Text=string.Empty;
                         textAreaMain.Text = string.Empty;
@@ -194,7 +202,7 @@ namespace CoderEditor
                 var result = MessageBox.Show("Do you want to save changes?", "Open", MessageBoxButton.YesNoCancel, MessageBoxImage.Question);
                 if (result == MessageBoxResult.Yes)
                 {
-                    if (save(fileName))
+                    if (save(PathToFile))
                     {
                         open();
                     }
@@ -214,7 +222,7 @@ namespace CoderEditor
         {
             if (IsNeedSaveFile())
             {
-                save(fileName);
+                save(PathToFile);
                 //HasChanges = false;
             }
         }
